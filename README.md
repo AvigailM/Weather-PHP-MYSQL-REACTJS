@@ -20,7 +20,6 @@ php -S 127.0.0.1:8080
 And Run MySQL with XAMPP:
 https://www.apachefriends.org/download.html
 
-### Add KEY From Openweathermap API 
+ ### Add A Openweathermap KEY To The App
 
 Openweathermap API : https://openweathermap.org/api
-
