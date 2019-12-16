@@ -23,7 +23,7 @@ $city = $_GET['city'];
 
 switch ($method) {
     case 'GET':
-		getFunction(sqlCityName($city),$con);
+		getFunction(sqlCityName($city),$con,$city);
       break;
     case 'POST':
 	
@@ -99,61 +99,36 @@ function findIdByName($city,$con) {
 
 
 //===================================
-function getFunction($sql,$con) {
-	$result = mysqli_query($con,$sql);
-
-		checkForResult($result);
-		$obj = $result -> fetch_object();
-		$json_var['cod'] = 200;
+function getFunction($sql,$con,$city) {
 	
-		if($obj){
-			$json_var['c_id'] = $obj->c_id;
-			$json_var['updated_at'] = $obj->updated_at;
-			$c_id = $json_var['c_id'];
-		
-			$sql_temp = "select * from temp".($c_id?" where t_city_id=$c_id":''); 
-			
-			$result_temp = mysqli_query($con,$sql_temp);
-			
-			checkForResult($result_temp);
-
-			$obj_temp = $result_temp -> fetch_object();
+	$sql_find_all = "SELECT c.* , t.* , w.* FROM city c INNER JOIN temp t ON c.c_id = t.t_city_id INNER JOIN wind w ON c.c_id = w.w_city_id WHERE c.c_city_name=$city";
 	
-			if($obj_temp){
-				$json_var['dt'] = $obj_temp->t_date_time;
-				$json_var['temp_min'] = $obj_temp->t_temp_min;
-				$json_var['temp_max'] =  $obj_temp->t_temp_max;		
-			}
+	$result = mysqli_query($con,$sql_find_all);
 	
-			$sql_wind = "select * from wind".($c_id?" where w_city_id=$c_id":''); 
-			$result_wind = mysqli_query($con,$sql_wind);
+	$obj = $result -> fetch_object();
 	
-	        checkForResult($result_wind);
-			
-			$obj_wind = $result_wind -> fetch_object();
-			if($obj_wind){
-				$json_var['w_speed'] =  $obj_wind->w_speed;
-			}
-		}
-		else{
-			$json_var['cod'] = 404;
-		}
-	
-		echo json_encode($json_var);
-	
-	
-		$con->close();
-}
-//===================================
-
-//===================================
-function checkForResult($res) {
-	if (!$res) {
-		http_response_code(404);
+	if (!$result || !$obj) {
 		$json_var['cod'] = 404;
-		die(mysqli_error($con));
+		$con->close();
+		die(json_encode($json_var));
 	}
+	
+	
+	
+	$json_var['cod'] = 200;
+	$json_var['c_id'] = $obj->c_id;
+	$json_var['updated_at'] = $obj->updated_at;
+	$json_var['dt'] = $obj->t_date_time;
+	$json_var['temp_min'] = $obj->t_temp_min;
+	$json_var['temp_max'] =  $obj->t_temp_max;		
+	$json_var['w_speed'] = $obj->w_speed;
+	echo json_encode($json_var);
+	
+
+	
+	$con->close();
 }
 //===================================
+
 
 ?>

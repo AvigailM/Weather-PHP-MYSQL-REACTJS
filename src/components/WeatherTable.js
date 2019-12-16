@@ -9,22 +9,25 @@ class WeatherTable extends Component {
         const { type, weatherdata } = this.props
         return (
             <Conttiner>
-                <Table border='1' width='100%' >
-                    <tr>
-                        <TableHeaderTh>Datetime</TableHeaderTh>
-                        <TableHeaderTh>Min temp</TableHeaderTh>
-                        <TableHeaderTh>Max temp</TableHeaderTh>
-                        <TableHeaderTh>Wind speed</TableHeaderTh>
-                    </tr>
-
-                    {weatherdata && weatherdata.map((weather) => (
-                        <TableDataRowTr key={weather.dt}>
-                            <TableDataRow>{type === 'Api' ? weather.dt_txt : weather.dt}</TableDataRow>
-                            <TableDataRow>{type === 'Api' ? weather.main.temp_min : weather.temp_min}</TableDataRow>
-                            <TableDataRow>{type === 'Api' ? weather.main.temp_max : weather.temp_max}</TableDataRow>
-                            <TableDataRow>{type === 'Api' ? weather.wind.speed : weather.w_speed}</TableDataRow>
-                        </TableDataRowTr>
-                    ))}
+                <Table >
+                    <thead>
+                        <tr>
+                            <TableHeaderTh>Datetime</TableHeaderTh>
+                            <TableHeaderTh>Min temp</TableHeaderTh>
+                            <TableHeaderTh>Max temp</TableHeaderTh>
+                            <TableHeaderTh>Wind speed</TableHeaderTh>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {weatherdata && weatherdata.map((weather) => (
+                            <TableDataRowTr key={weather.dt}>
+                                <TableDataRow>{type === 'Api' ? weather.dt_txt : weather.dt}</TableDataRow>
+                                <TableDataRow>{type === 'Api' ? weather.main.temp_min : weather.temp_min}</TableDataRow>
+                                <TableDataRow>{type === 'Api' ? weather.main.temp_max : weather.temp_max}</TableDataRow>
+                                <TableDataRow>{type === 'Api' ? weather.wind.speed : weather.w_speed}</TableDataRow>
+                            </TableDataRowTr>
+                        ))}
+                    </tbody>
                 </Table>
             </Conttiner>
 
@@ -47,6 +50,7 @@ const Table = styled.table`
     border-spacing: 0;
     border-collapse: collapse;
     table-layout: fixed;
+    border: 1;
 `;
 
 const TableHeaderTh = styled.th`
